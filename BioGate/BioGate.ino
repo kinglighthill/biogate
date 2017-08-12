@@ -7,16 +7,13 @@
 const char* ssid     = "AEG-NET";      // Android AP SSID.
 const char* password = "ieeenovanova"; // Android AP Password.
 const uint32_t TxRx = 2;               // LED Pin for Transmission and Reception of packets.
-<<<<<<< HEAD
 const uint32_t signatureAddress = 0;
 const uint32_t signatureLength = 7;
-=======
 const uint8_t signatureAddress = 0;    // Module Signature Address.
 const uint8_t signatureLength = 7;     // Used 7.
 const uint8_t atSSIDAddress = 7;       // Router SSID Address {For Connecting to the residential network of the Raspberry Pi}.
 const uint8_t atSSIDLength = 10;       // Used 17.
 
->>>>>>> develop
 String jBuff;                          // Temporary Storage for re-use of JSON strings by the JSON Library.
 
 WiFiServer server(1942);               // WiFi Server to listen on port 1942.
