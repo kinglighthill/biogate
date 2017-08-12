@@ -1,54 +1,45 @@
+// Created By Francis Ilechukwu C. 19:56 12/08/2017
 #include <ArduinoJson.h>
 #include <WiFi.h>
+#include <EEPROM.h>
+const char* ssid     = "AEG-NET";      // Android AP SSID.
+const char* password = "ieeenovanova"; // Android AP Password.
+const uint32_t TxRx = 2;               // LED Pin for Transmission and Reception of packets.
+const uint32_t signatureAddress
+const uint32_t signature
+String jBuff;                          // Temporary Storage for re-use of JSON strings by the JSON Library.
 
-const char* ssid     = "AEG-NET";
-const char* password = "ieeenovanova";
+WiFiServer server(1942);               // WiFi Server to listen on port 1942.
 
-String jBuff;
-
-WiFiServer server(1942);
-
-void setup()
-{
-    Serial.begin(115200);
-    pinMode(2, OUTPUT);      // set the LED pin mode
-
+void setup() {
+    Serial.begin(115200);    // For Serial outputing.
+    pinMode(TxRx, OUTPUT);      // set the LED pin mode
     delay(10);
-
-    // We start by connecting to a WiFi network
-
+    EEPROM.begin(512);
     Serial.println();
     Serial.println();
     Serial.print("Connecting to ");
     Serial.println(ssid);
-
     WiFi.begin(ssid, password);
-
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
     }
-
     Serial.println("");
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
-    
     server.begin();
-
 }
 
-int value = 0;
-
-void loop(){
+void loop() {
  WiFiClient client = server.available();   // listen for incoming clients
   Serial.println("here again");
-  if (client) {                             // if you get a client,
-    Serial.println("new client");           // print a message out the serial port
-    String currentLine = "";                // make a String to hold incoming data from the client
+  if (client) {                             // Android device has connected
+    Serial.println("new client");     
+    String currentLine = "";                // make a String to hold incoming data from the client (Android)
     while (client.connected()) {            // loop while the client's connected
-      if (client.available()) {             // if there's bytes to read from the client,
-        Serial.println("available");
+      if (client.available()) {             // if there's bytes to read from the client
         char c = client.read();             // read a byte, then
         currentLine += c;
         jBuff = currentLine;
