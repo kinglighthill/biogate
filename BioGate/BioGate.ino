@@ -5,8 +5,8 @@
 const char* ssid     = "AEG-NET";      // Android AP SSID.
 const char* password = "ieeenovanova"; // Android AP Password.
 const uint32_t TxRx = 2;               // LED Pin for Transmission and Reception of packets.
-const uint32_t signatureAddress
-const uint32_t signature
+const uint32_t signatureAddress = 0;
+const uint32_t signatureLength = 7;
 String jBuff;                          // Temporary Storage for re-use of JSON strings by the JSON Library.
 
 WiFiServer server(1942);               // WiFi Server to listen on port 1942.
