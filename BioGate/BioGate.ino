@@ -1,16 +1,24 @@
 // Created By Francis Ilechukwu C. 19:56 12/08/2017
-#include <ArduinoJson.h>
-#include <WiFi.h>
+
+#include <ArduinoJson.h>               // JSON Library.
+#include <WiFi.h>                      // WiFi Library.
 #include <EEPROM.h>
+
 const char* ssid     = "AEG-NET";      // Android AP SSID.
 const char* password = "ieeenovanova"; // Android AP Password.
 const uint32_t TxRx = 2;               // LED Pin for Transmission and Reception of packets.
-const uint32_t signatureAddress
-const uint32_t signature
+const uint8_t signatureAddress = 0;    // Module Signature Address.
+const uint8_t signatureLength = 7;     // Used 7.
+const uint8_t atSSIDAddress = 7;       // Router SSID Address {For Connecting to the residential network of the Raspberry Pi}.
+const uint8_t atSSIDLength = 10;       // Used 17.
+
 String jBuff;                          // Temporary Storage for re-use of JSON strings by the JSON Library.
 
 WiFiServer server(1942);               // WiFi Server to listen on port 1942.
 
+/*
+ * SETUP
+ */
 void setup() {
     Serial.begin(115200);    // For Serial outputing.
     pinMode(TxRx, OUTPUT);      // set the LED pin mode
@@ -32,6 +40,9 @@ void setup() {
     server.begin();
 }
 
+/*
+ * LOOP
+ */
 void loop() {
  WiFiClient client = server.available();   // listen for incoming clients
   Serial.println("here again");
@@ -69,3 +80,27 @@ void loop() {
     // close the connection:
     Serial.println("idle");
 }
+
+/* 
+ * To Read Config value from EEPROM 
+ */
+String getConfig(uint32_t address, uint8_t _length) {
+  String configValue;
+  for (int i = 0; i < _length; ++i) {
+    configValue += char(EEPROM.read(address + i));
+  }
+  return configValue;
+}
+
+/* 
+ *  TO Write Config value to EEPROM
+ */
+String writeConfig(uint32_t address, uint8_t _length, String _config) {
+  for (int i = 0; i < _length; ++i) {
+    EEPROM.write(address + i, _config[i]);
+    Serial.print("Wrote: ");
+    Serial.println(_config[i]); 
+  }    
+  EEPROM.commit();
+}
+
